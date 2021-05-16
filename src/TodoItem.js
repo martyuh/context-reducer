@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, memo } from 'react'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import CheckBox from '@material-ui/core/Checkbox';
@@ -10,6 +10,9 @@ import useToggleState from './hooks/useToggleState'
 import EditTodoForm from './EditTodoForm'
 import {DispatchContext} from './context/todosContext'
 
+//inefficient without memo because every time a todo is added the todolist changes and every todo is remapped over and todoitems is resent new props every time. This of course results in a rerender of every todo every time
+//purecomponent in the class based approach allowed you to prevent a rerender of already established todos by tracking the props. if a prop was different or new, that todo would rerender 
+//react.memo is a higher order component that replicates this process
 const TodoItem = ({task,completed,id}) => {
  
     //custom hook to toggle whether the todoitem is being edited
@@ -39,4 +42,7 @@ const TodoItem = ({task,completed,id}) => {
     )
 }
 
-export default TodoItem 
+//purecomponent in the class based approach allowed you to prevent a rerender of already established todos by tracking the props. if a prop was different or new, that todo would rerender, otherwise if it were the same that todo would not be rerendered
+//react.memo is a higher order component that replicates this process
+//memoization is caching results. react.memo is remembering the older version and recognizes if it has changed 
+export default memo(TodoItem) 
