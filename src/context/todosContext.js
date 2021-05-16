@@ -1,7 +1,8 @@
 //todos
 //all methods that interact with todos
-import {createContext, useReducer} from 'react'
+import {createContext} from 'react'
 import {todoReducer} from '../reducers/todoReducer'
+import {useLocalStorageReducer} from '../hooks/useLocalStorageReducer'
 //this will be rendered if nothing is in storage
 const defaultTodos = [
     { id: 1, task: "Mow the lawn using goats", completed: false },
@@ -20,8 +21,11 @@ export const DispatchContext=createContext()
     // provider provides access to state and methods in the context and wraps around child
     //component props passed as children from the app component
 export const TodosProvider =(props)=>{
-//pass todosreducer to usereducer it will give you access to state and the dispatch action method
-  const[todos,dispatch] =useReducer(todoReducer,defaultTodos)
+//pass todosreducer to localStorageReducer, the defaultTodos, and the key. 
+//within the customhook reducer it will have access to the todoReducer where it will establish state and dispatch actions to the reducer
+//todos is the state that is returned after the todoreducer is passed localstorage or default todos through the 
+//uselocalstoragereducer
+  const[todos,dispatch] =useLocalStorageReducer('todos',defaultTodos,todoReducer)
     return (
         //pass state and the dispatch method as an object to the provider so that it can be access by the children 
         //components
